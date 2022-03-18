@@ -1,0 +1,64 @@
+Modulo 03 - Manipulação de dados
+
+Uma revisão do diagrama de entidades e relacionamento;
+Como um projeto de banco de dados é documentado através do diagrama de entidades e relacionamentos.
+
+
+
+Atenção: O objetivo desta aula é mostrar que o banco de dados deve ser montado conforme a modelagem. Se é 1:1 ou 1:N vai depender do tipo de negócio. Apresento aqui um exemplo hipotético que contenha todas as possíveis relações.
+
+O analista de sistemas deve olhar o resultado do diagrama e montar o banco baseado nele. Se alguém escreveu que a regra é 1:1 ele vai criar assim. Se a regra é 1:N ele vai criar diferente. Não cabe o analista questionar o negócio. Ser 1:N não é sempre verdade.
+
+Um outro exemplo: Se o banco de dados de um Airbus? Apesar do avião ter um modelo, cada avião tem um número de série único e seu cadastro está associado a um único item de uma venda e não se repete.
+
+O importante é que independente do resultado do modelo, iremos construir um banco de dados baseado no que o diagrama apresentado nos mostra.
+
+
+Banco de dados -  É uma estrutura isolada onde as informações são colocadas. Podemos dentro do banco de dados consultar dados de outro banco de dados, mas isso é permitido se os critérios de segurança permitirem.
+
+Entidade - Tabela - Dentro do banco de dados temos diversas entidades. Uma básica é a tabela. Ela é como se fosse uma grande planilha com colunas chamadas de campos e linhas de registros. 
+
+Chave Primaria - Dentro da tabela, posso ter chave primária. São campos que não podem se repetir dentro daquela tabela. Exemplo, se eu tiver o código do cliente, não posso ter clientes com códigos repetidos. Mas como o nome não faz parte da chave primária, posso ter clientes com o mesmo nome.
+
+Chave Estrangeira -  A chave estrangeira é uma ligação entre um campo de uma tabela e o campo de outra tabela. Como o próprio nome diz, os bancos de dados são chamados de relacionais, porque suas tabelas podem ter relações entre si. Essa relação faz com que um campo de uma tabela obrigatoriamente exista em outra se houver uma relação. Se eu incluir dentro de uma tabela um campo que não existe na tabela primária, o banco de dados não vai deixar incluir a informação.
+
+Binário ou VarBinario - para salvar os arquivos como uma imagem 
+
+Projeto de Banco de Dados
+
+- Análise dos requisitos:
+	Entendimento das regras de negócio;
+	Efetuar atividades de entrevista e reuniões;
+	Desenho de modelo mais fiel a realidade;
+
+Primeiro passo:
+- Modelo Conceitual:
+	Construção do diagrama de entidade e relacionamento;
+	Estabelecer a cardinalidade das entidades;
+Cardinalidade - tipo de relação entre as tabelas : 1:N, 1:1, N:N
+
+Entidades representada como quadrado 
+Relação entre ela e representada como um losangolo 
+
+Diagrama de entidade e relacionamento 
+- Atrivutos das entidades:
+	Estabelece caracteristicas de cada entidade 
+
+- Transformar o diagrama de entidades em banco de dados:
+	Transformar cada entidade em uma ou mais tabelas físicas do banco de dados.
+	Cada relação da modelagem será um relacionamento nas tabelas do banco de dados.
+
+PK - Partition Key o que identifica uma tabela, não podeser repetido
+FK - Foreing Key que é a chave estrangeira da tabela 
+
+- Construír o banco de dados
+	Podemos usar ferramentas CASE para isso.
+	CASE - Computer-Aided Software Engineening.
+	Ex: Star UML, Astah, ERWin.
+
+- Ojetivo do treinamento é o SQL Server 2017;
+- O SQL Server Management Studio oferece assistêntes;
+
+
+
+
