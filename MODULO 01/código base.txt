@@ -1,0 +1,69 @@
+create database UNIP_LPBD;
+use UNIP_LPBD;
+
+create table if not exists unip_lpbd.departamento(
+	cd_departamento INT not null auto_increment primary key,
+    nm_departamento VARCHAR(45) null,
+    vl_orcamento_departamento DECIMAL(8,2) null,
+    dt_criacao datetime null default current_timestamp
+) engine = innoDB; -- motor do banco de dados 
+
+create table if not exists unip_lpbd.cargo (
+	cd_cargo int not null auto_increment primary key,
+    nm_cargo varchar(45) null,
+    dt_criacao datetime null default current_timestamp
+);
+
+create table if not exists unip_lpbd.funcionario (
+	cd_funcionario INT not null auto_increment primary key,
+    nm_funcionario VARCHAR(45) null,
+    ds_email_funcionario VARCHAR(45) null,
+    cd_cpf_funcionario VARCHAR(45) null,
+    vl_salario_funcionario DECIMAL(8,2) null,
+    idade_funcionario INT null,
+    cd_departamento INT null,
+    cd_cargo int not null,
+    dt_criacao datetime null default current_timestamp,
+    unique index cd_cpf_funcionario_UNIQUE (cd_cpf_funcionario ASC),
+    index fk_funcionario_departamento_idx (cd_departamento ASC),
+    index fk_funcionario_cargo1_idx (cd_cargo ASC),
+    constraint fk_funcionario_departamento
+		foreign key (cd_departamento)
+        references unip_lpbd.departamento (cd_departamento)
+        on delete no action
+        on update no action,
+	constraint fk_funcionario_cargo1
+		foreign key (cd_cargo)
+        references unip_lpbd.cargo (cd_cargo)
+        on delete no action
+        on update no action
+);
+
+create table if not exists unip_lpbd.auditoria (
+	cd_auditoria int not null auto_increment primary key,
+    dt_auditoria timestamp default current_timestamp,
+    usuario_bd varchar(45) not null,
+    menssagem varchar(100) not null
+);
+
+insert into departamento(nm_departamento, vl_orcamento_departamento) values ('Desenvolvimento', 10000);
+insert into departamento(nm_departamento, vl_orcamento_departamento) values ('Produtos', 20000);
+insert into departamento(nm_departamento, vl_orcamento_departamento) values ('Serviços', 10000);
+insert into departamento(nm_departamento, vl_orcamento_departamento) values ('Diretoria', 50000);
+
+insert into cargo (nm_cargo)
+values
+('Analista de Sistemas'),
+('Vendador Técnico'),
+('Motorista'),
+('VP');
+
+insert into funcionario (nm_funcionario, ds_email_funcionario, cd_cpf_funcionario, vl_salario_funcionario, idade_funcionario, cd_departamento, cd_cargo)
+values
+('Mario', 'mario.quinello@docente.unip.br', 11111111111, '2000', 44, 1, 1),
+('Fernando', 'fernando@fernando.com.br', 22222222222, '1000', 24, 3, 1),
+('Otavio', 'otavio@otavio.com.br', 33333333333, '3000', 35, 4, 2),
+('Lauro', 'lauro@lauro.com.br', 44444444444, '3000', 30, 4, 3),
+('Gumercindo', 'gumercido@gumercido.com.br', 55555555555, '2000', 50, 1, 3),
+('Roberto', 'roberto@oberto.com.br', 66666666666, '2000', 50, 1, 4),
+('Claudio', 'cluadio@claudio.com.br', 777777777777, '2000', 50, 1, 4);
