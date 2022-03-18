@@ -1,0 +1,5 @@
+PARA RESTAURAR UM BANCO DE DADOS A PARTIR DO BACKUP: 
+- clica com o botão direito do mouse sobre banco de dados
+- selecione disposidivo 
+- coloque o caminho onde está o seu banco de dados 
+- 

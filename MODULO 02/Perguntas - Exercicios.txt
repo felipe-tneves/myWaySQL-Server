@@ -1,0 +1,116 @@
+Perguntas
+
+1)Desafio: Nosso sistema de vendas tem mais uma tabela a ser criada, a de vendedores.
+
+Algumas informações:
+
+Nome da tabela deve ser TABELA DE VENDEDORES
+O campo matrícula do vendedor (nome do campo MATRICULA), deve ser uma string de 5 posições.
+O nome do vendedor (nome do campo NOME) deve ser uma string de 100 posições.
+Percentual de comissão (nome do campo PERCENTUAL COMISSÃO) representa o percentual de comissão que o vendedor ganha sobre cada venda.
+Crie esta tabela no banco de dados SUCOS_VENDAS.
+
+2)Crie a mesma tabela de vendedores, porém com o nome TABELA DE VENDEDORES 02, mas através do assistente. Use os mesmos nomes e campos. Depois, pelo assistente, gere o script para criação desta tabela.
+
+3)Apague a tabela TABELA DE VENDEDORES 02 usando script SQL.
+
+4)Vamos criar um vendedor na tabela de vendedores. A informação é a seguinte:
+
+Matrícula: 00233
+Nome: José Geraldo da Fonseca
+Comissão: 10%
+
+5)Vamos criar mais dois vendedores:
+
+Matrícula: 00235
+Nome: Márcio Almeida Silva
+Comissão: 8%
+E:
+
+Matrícula: 00236
+Nome: Cláudia Morais
+Comissão: 8%
+
+6)Vamos criar mais dois vendedores, mas agora pelo assistente:
+
+Matrícula: 00237
+Nome: Roberta Martins
+Comissão: 11%
+E
+
+Matrícula: 00238
+Nome: Pericles Alves
+Comissão: 7%
+
+7)Recebemos a seguinte informação:
+
+Pericles Alves (matrícula 00238) recebeu aumento e sua comissão passou a ser de 11%.
+José Geraldo da Fonseca (matrícula 00233) reclamou que seu nome real é José Geraldo da Fonseca Junior.
+Efetue estas correções na base de dados.
+
+8)José Geraldo da Fonseca (matrícula 00233) foi demitido. Retire-o da tabela de vendedores.
+
+9)Para evitar problemas na inclusão de novos vendedores, crie uma chave primária para esta tabela, sabendo que não podemos ter um vendedor com a mesma matrícula.
+
+O nome da chave primária deve ser PK_VENDEDORES.
+
+Outro ponto importante: serão dois comandos, que devem ser executados separadamente.
+
+10)Vamos incluir novos campos na tabela de vendedores. Eles serão a data de admissão (nome do campo DATA ADMISSÃO) e se o vendedor está ou não de férias (nome do campo DE FÉRIAS).
+
+Não esqueça de recriar a chave primária e depois inclua as informações abaixo:
+
+Matrícula: 00235
+Nome: Márcio Almeida Silva
+Comissão: 8%
+Data de admissão: 15/08/2014
+Está de férias? Não
+Matrícula: 00236
+Nome: Cláudia Morais
+Comissão: 8%
+Data de admissão: 17/09/2013
+Está de férias? Sim
+Matrícula: 00237
+Nome: Roberta Martins
+Comissão: 11%
+Data de admissão: 18/03/2017
+Está de férias? Sim
+Matrícula: 00238
+Nome: Pericles Alves
+Comissão: 11%
+Data de admissão: 21/08/2016
+Está de férias? Não
+Dicas:
+
+Apague a tabela
+Crie novamente com os novos campos
+Crie a chave primária
+Inclua os comandos de INSERT
+
+11)Selecione o nome e a matrícula dos vendedores.
+
+12)Verifique os dados cadastrais da vendedora Cláudia Morais.
+
+13)Veja quais são os vendedores que possuem comissão maior que 10%.
+
+14)Veja quais são os vendedores que foram admitidos na empresa depois de 2016 (inclusive).
+
+15)A expressão abaixo é verdadeira ou falsa?
+(NOT ((3 > 2) OR (4 >= 5)) AND (5 > 4)) OR (9 > 0)
+
+16)Quantos clientes possuem o último sobrenome Mattos?
+
+17)Quantos bairros diferentes da cidade do Rio de Janeiro possuem clientes?
+
+18)Queremos obter as 10 primeiras vendas do dia 01/01/2017. Qual seria o comando SQL para obter este resultado?
+
+19)Qual foi a maior venda do produto "Linha Refrescante - 1 Litro - Morango/Limão", em quantidade? (Obtenha este resultado usando 2 SQLs).
+
+20)Aproveitando o exercício anterior, quantos itens de venda existem com a maior quantidade de venda para o produto '1101035'?
+
+21)Quais são os clientes que fizeram mais de 2000 compras em 2016?
+
+22)Veja o ano de nascimento dos clientes e classifique-os como: nascidos antes de 1990 são adultos, nascidos entre 1990 e 1995 são jovens e nascidos depois de 1995 são crianças. Liste o nome do cliente e esta classificação.
+
+23)Obtenha o faturamento anual da empresa. Leve em consideração que o valor financeiro das vendas consiste em multiplicar a quantidade pelo preço.
+

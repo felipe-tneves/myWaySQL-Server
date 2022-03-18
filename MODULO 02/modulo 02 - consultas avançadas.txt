@@ -1,0 +1,1476 @@
+
+Como preparar o ambiente para este curso;
+Um pouco da história da linguagem SQL.
+
+Como filtrar o resultado de uma seleção;
+As condições lógicas para validar o resultado de uma consulta, como o AND e OR;
+O comando LIKE, para obter seleções de pedaços de strings dentro de strings.
+
+Como exibir as saídas de dados;
+Como ordenar as consultas;
+Como eliminar as linhas repetidas;
+A agrupar linhas através de um critério e fazer cálculos dos registros agrupados;
+A cláusula HAVING, para filtrar dados agrupados.
+
+Como juntar tabelas usando diversos tipos de JOIN;
+Como unir consultas com os campos do mesmo tipo;
+Como usamos sub-consultas;
+O conceito de visão.
+
+As funções do SQL Server;
+As funções do tipo string, de data e numéricas;
+A converter dados.
+
+Como colocar em prática tudo que aprendemos, fazendo dois relatórios para nossa empresa de sucos de frutas.
+
+ ------------------------------------------------------------------------------------
+
+PARA RESTAURAR UM BANCO DE DADOS A PARTIR DO BACKUP: 
+- clica com o botão direito do mouse sobre banco de dados
+- selecione disposidivo 
+- coloque o caminho onde está o seu banco de dados 
+- clica em adicionar e coloque o caminho do arquivo 
+- depois clica em ok 
+
+-------------------------------------------------------------------------------------
+
+PARA VISUALIZAR A ESTRUTURA QUE ESTÁ ORGANIZADA SUAS TABELAS:
+- clica com o botão direito em cima da pasta Diagrama de Banco de Dados 
+- Novo diagrama de banco de dados 
+- seleciona toas as tabelas e aperto em ok 
+
+-------------------------------------------------------------------------------------
+
+SELECT *FROM TABELA WHERE X = A (VERDADEIRO OU FALSO)
+
+SELECT *FROM TABELA WHERE X = A OR Y = B ( OU )
+- se uma das expressões for verdadeira a expressão completa será verdadeira
+(V) OR (V) verdadeiro
+(V) OR (F) verdadeiro
+(F) OR (V) verdadeiro
+(F) OR (F) falso
+ 
+SELECT *FROM TABELA WHERE X =A AND Y = B ( E )
+- se todas as expressões forem verdadeiras a expressão completa será verdadeira 
+(V) AND (V) verdadeiro
+(V) AND (F) falso
+(F) AND (V) falso
+(F) AND (F) falso
+
+NOT (X = A OR Y = B)
+NOT inverte o resultado sa consulta 
+(V) OR (V) falso
+(V) OR (F) falso
+(F) OR (V) falso
+(F) OR (F) verdadeiro
+
+NOT (X = A AND Y = B)
+NOT inverte o resultado da consulta 
+(V) AND (V) falso
+(V) AND (F) verdadeiro
+(F) AND (V) verdadeiro 
+(F) AND (F) verdadeiro
+
+SELECT * FROM [TABELA DE PRODUTOS] WHERE 
+[SABOR] = 'Manga' OR [TAMANHO] = '700 ml' 
+
+SELECT * FROM [TABELA DE PRODUTOS] WHERE 
+[SABOR] = 'Manga' AND [TAMANHO] = '700 ml' 
+
+SELECT * FROM [TABELA DE PRODUTOS] WHERE 
+NOT ([SABOR] = 'Manga' AND [TAMANHO] = '700 ml')
+
+SELECT * FROM [TABELA DE PRODUTOS] WHERE 
+NOT ([SABOR] = 'Manga' OR [TAMANHO] = '700 ml')
+
+SELECT * FROM [TABELA DE PRODUTOS] WHERE 
+[SABOR] = 'Manga' AND NOT ( [TAMANHO] = '700 ml')
+
+SELECT * FROM [TABELA DE PRODUTOS] WHERE 
+[SABOR] IN ('Manga', 'Laranja')
+
+SELECT * FROM [TABELA DE PRODUTOS] WHERE 
+[SABOR] = 'Manga' OR [SABOR] ='Laranja'
+
+SELECT * FROM [TABELA DE PRODUTOS] WHERE 
+[SABOR] NOT IN ('Manga', 'Laranja')
+
+SELECT * FROM [TABELA DE PRODUTOS] WHERE 
+NOT ([SABOR] = 'Manga' OR [SABOR] ='Laranja')
+
+SELECT * FROM [TABELA DE PRODUTOS] WHERE 
+[SABOR] IN ('Manga', 'Laranja') AND [PREÇO DE LISTA] > 10
+
+SELECT * FROM [TABELA DE PRODUTOS] WHERE 
+[SABOR] IN ('Manga', 'Laranja') AND [PREÇO DE LISTA] BETWEEN 10 AND 13
+
+- and [preço de lista] >= 10 and [preço de lista] <= 13
+
+SELECT * FROM [TABELA DE PRODUTOS] WHERE 
+[SABOR] IN ('Manga', 'Laranja') AND [PREÇO DE LISTA] >= 10 AND [PREÇO DE LISTA] <= 13
+
+in -> contido em, pertence a um conjunto
+between -> entre os valores 
+
+--------------------------------------------------------------------------------------
+
+SELECT *FROM TABELA WHERE CAMPO LIKE <CONDIÇÃO>
+
+<CONDIÇÃO> - texto a seu lado. O símbolo % é usado para representar qualquer registro genérico. (Equivalente ao * quando manipulamos aqrquivos). 
+usado apenas em string
+
+SELECT * FROM [TABELA DE PRODUTOS]
+
+SELECT * FROM [TABELA DE PRODUTOS] WHERE [NOME DO PRODUTO] LIKE '%Litros%'
+
+SELECT * FROM [TABELA DE PRODUTOS] WHERE [NOME DO PRODUTO] LIKE 'Litros%'
+
+SELECT * FROM [TABELA DE PRODUTOS] WHERE [NOME DO PRODUTO] LIKE '%Litros%' AND [SABOR] = 'Laranja'
+
+busca a palavra espcifico
+%nome% - busca todo mundo que tem esse nome
+%nome - busca todo mundo que termina com esse nome
+nome% - busca todo mundo que começa com esse nome 
+
+Quantos clientes possuem o último sobrenome Mattos?
+SELECT *FROM [TABELA DE CLIENTES] WHERE NOME LIKE '%Mattos'
+
+--------------------------------------------------------------------------------------
+
+DISTINCT - Irá retornar somente linhas com valores diferentes, mostra as linhas sem a repetição ,ou seja, não mostra as linhas com os mesmos valores 
+
+SELECT DISTINCT *FROM TABELA 
+
+SELECT EMBALAGEM, TAMANHO FROM [TABELA DE PRODUTOS]
+
+SELECT DISTINCT EMBALAGEM, TAMANHO FROM [TABELA DE PRODUTOS]
+
+SELECT DISTINCT EMBALAGEM, TAMANHO, SABOR FROM [TABELA DE PRODUTOS] WHERE
+[SABOR] = 'Laranja'
+
+SELECT DISTINCT EMBALAGEM, TAMANHO FROM [TABELA DE PRODUTOS] WHERE
+[SABOR] = 'Laranja'
+
+SELECT DISTINCT EMBALAGEM, TAMANHO, SABOR FROM [TABELA DE PRODUTOS]
+
+Quantos bairros diferentes da cidade do Rio de Janeiro possuem clientes?
+SELECT DISTINCT BAIRRO FROM [TABELA DE CLIENTES] WHERE CIDADE = 'Rio de Janeiro'
+
+--------------------------------------------------------------------------------------
+
+TOP - Limita o número de linhas exibidas na consulta
+
+SELECT TOP 4 *FROM TABELA 
+
+SELECT * FROM [TABELA DE PRODUTOS]
+
+SELECT TOP 3 * FROM [TABELA DE PRODUTOS]
+
+SELECT * FROM [TABELA DE PRODUTOS] WHERE [SABOR] = 'Laranja'
+
+SELECT TOP 3 * FROM [TABELA DE PRODUTOS] WHERE [SABOR] = 'Laranja'
+
+SELECT EMBALAGEM, TAMANHO FROM [TABELA DE PRODUTOS]
+
+SELECT DISTINCT EMBALAGEM, TAMANHO FROM [TABELA DE PRODUTOS]
+
+SELECT DISTINCT TOP 3 EMBALAGEM, TAMANHO FROM [TABELA DE PRODUTOS]
+
+Queremos obter as 10 primeiras vendas do dia 01/01/2017. Qual seria o comando SQL para obter este resultado?
+
+SELECT TOP 10 *FROM [NOTAS FISCAIS] WHERE [DATA] = '2017-01-01'
+
+--------------------------------------------------------------------------------------
+
+SELECT *FROM TABELA ORDER BY CAMPO
+
+Apresenta o resultado da consulta ordenado pelo campo determinado no ORDER BY
+
+SELECT * FROM [dbo].[TABELA DE PRODUTOS]
+
+SELECT * FROM [TABELA DE PRODUTOS] ORDER BY [PREÇO DE LISTA]
+
+SELECT * FROM [TABELA DE PRODUTOS] ORDER BY [PREÇO DE LISTA] DESC
+
+SELECT * FROM [TABELA DE PRODUTOS] ORDER BY [NOME DO PRODUTO]
+
+SELECT [EMBALAGEM], [NOME DO PRODUTO] FROM [TABELA DE PRODUTOS] 
+ORDER BY [EMBALAGEM], [NOME DO PRODUTO]
+
+SELECT [EMBALAGEM], [NOME DO PRODUTO] FROM [TABELA DE PRODUTOS] 
+ORDER BY [EMBALAGEM] DESC, [NOME DO PRODUTO] ASC
+
+String - ordem alfabetica 
+
+ASC (Ascendente) - do menor para o maior 
+DESC (Descendente) - do maior para o menor 
+
+Podemos ter mais de um campo participando da ordenação
+
+ORDER BY CAMPO1, CAMPO2
+
+Qual foi a maior venda do produto "Linha Refrescante - 1 Litro - Morango/Limão", em quantidade? (Obtenha este resultado usando 2 SQLs).
+
+Primeiro, vamos buscar o código do produto "Linha Refrescante - 1 Litro - Morango/Limão":
+SELECT * FROM [TABELA DE PRODUTOS] 
+WHERE [NOME DO PRODUTO] = 'Linha Refrescante - 1 Litro - Morango/Limão'
+
+Com esta consulta, obtemos o resultado do código deste produto: '1101035'. E com esta informação, fazemos a consulta para achar a maior quantidade vendida deste produto:
+
+SELECT * FROM [ITENS NOTAS FISCAIS]
+WHERE [CODIGO DO PRODUTO] = '1101035'
+ORDER BY QUANTIDADE DESC
+
+Veremos que a maior quantidade foi 99.
+
+--------------------------------------------------------------------------------------
+
+SELECT <campos> FROM TABELA GROUP BY CAMPO
+Apresenta o resultado agrupando valores numéricos por chave de critério
+
+EX: Queremos agrupar pelo campo X e somar os valores em Y
+
+SELECT X, SUM(Y) FROM TABELA GROUP BY X 
+
+Podemos usar:
+
+SUM() - Soma os valores 
+MAX - Máximo
+Min - Mínimo
+AVG - Média
+Count - Conta ocorrências 
+
+SELECT SUM(Y) FROM TABELA
+
+Aproveitando o exercício anterior, quantos itens de venda existem com a maior quantidade de venda para o produto '1101035'?
+
+SELECT COUNT(*) FROM [ITENS NOTAS FISCAIS]
+WHERE [CODIGO DO PRODUTO] = '1101035'
+AND QUANTIDADE = 99
+
+--------------------------------------------------------------------------------------
+
+HAVING - O HAVING é uma condição (Filtro) que se aplica ao resultado de uma agregação
+A HAVING cláusula foi adicionada ao SQL porque a WHERE palavra - chave não pode ser usada com funções agregadas.
+
+SELECT X, SUM(Y) FROM TABELA GROUP BY X
+
+Quero só visualizar os campos cuja a soma der maior que 6.
+
+SELECT X, SUM(Y) FROM TABELA GROUP BY X HAVING SUM(Y)) >=6
+
+SELECT * FROM [dbo].[TABELA DE CLIENTES]
+
+SELECT ESTADO, SUM([LIMITE DE CREDITO]) FROM [TABELA DE CLIENTES] GROUP BY ESTADO
+
+SELECT ESTADO, SUM([LIMITE DE CREDITO]) FROM [TABELA DE CLIENTES] GROUP BY ESTADO 
+HAVING SUM([LIMITE DE CREDITO]) >= 850000
+
+SELECT EMBALAGEM, SUM([PREÇO DE LISTA]), MAX([PREÇO DE LISTA]), MIN([PREÇO DE LISTA]) 
+FROM [TABELA DE PRODUTOS] GROUP BY EMBALAGEM
+
+SELECT EMBALAGEM, MAX([PREÇO DE LISTA]), MIN([PREÇO DE LISTA]) FROM [TABELA DE PRODUTOS] 
+GROUP BY EMBALAGEM HAVING SUM([PREÇO DE LISTA]) <= 80
+
+SELECT EMBALAGEM, MAX([PREÇO DE LISTA]), MIN([PREÇO DE LISTA]) FROM [TABELA DE PRODUTOS] 
+GROUP BY EMBALAGEM HAVING SUM([PREÇO DE LISTA]) <= 80 AND MAX([PREÇO DE LISTA]) >= 6
+Cláusula HAVING com GROUP BY – A cláusula HAVING determina uma condição de busca para um grupo ou um conjunto de registros, definindo critérios para limitar os resultados obtidos a partir do agrupamento de registros. É importante lembrar que essa cláusula só pode ser usada em parceria com GROUP BY.
+
+Quais são os clientes que fizeram mais de 2000 compras em 2016?
+
+SELECT CPF, COUNT(*) FROM [NOTAS FISCAIS]
+WHERE YEAR(DATA) = 2016
+GROUP BY CPF
+HAVING COUNT(*) > 2000
+
+--------------------------------------------------------------------------------------
+
+CASE - Fazemos um teste em um ou mais campos e, dependendo do resultado, teremos um ou outro valor
+
+CASE 
+	WHERE<codição1> THEN<Valor1>
+	WHERE<condição2> THEN<Valor2>
+	(...)
+	WHERE<codiçãoN> THEN<ValorN>
+	ELSE ValorELSE
+END
+
+
+SELECT X,
+CASE
+	WHERE Y>=8 AND Y<=10 THEN 'OTIMO'
+	WHERE Y>=7 AND Y<8   THEN 'BOM'
+	WHERE Y>=5 AND Y<7   THEN 'MEDIO'
+	ESLE 'RUIM'
+END
+FROM TABELA
+
+SELECT * FROM [TABELA DE PRODUTOS]
+
+SELECT [NOME DO PRODUTO],
+CASE 
+WHEN [PREÇO DE LISTA] >= 12 THEN 'PRODUTO CARO'
+WHEN [PREÇO DE LISTA] >= 7 AND [PREÇO DE LISTA] < 12 THEN 'PRODUTO EM CONTA'
+ELSE 'PRODUTO BARATO' END
+FROM
+[TABELA DE PRODUTOS]
+
+SELECT [NOME DO PRODUTO],
+CASE 
+WHEN [PREÇO DE LISTA] >= 12 THEN 'PRODUTO CARO'
+WHEN [PREÇO DE LISTA] >= 7 AND [PREÇO DE LISTA] < 12 THEN 'PRODUTO EM CONTA'
+ELSE 'PRODUTO BARATO' END,
+AVG([PREÇO DE LISTA])
+FROM
+[TABELA DE PRODUTOS]
+GROUP BY [NOME DO PRODUTO],
+CASE 
+WHEN [PREÇO DE LISTA] >= 12 THEN 'PRODUTO CARO'
+WHEN [PREÇO DE LISTA] >= 7 AND [PREÇO DE LISTA] < 12 THEN 'PRODUTO EM CONTA'
+ELSE 'PRODUTO BARATO' END
+
+SELECT YEAR(DATA), COUNT(*) FROM [NOTAS FISCAIS] GROUP BY YEAR(DATA)
+
+Veja o ano de nascimento dos clientes e classifique-os como: nascidos antes de 1990 são adultos, nascidos entre 1990 e 1995 são jovens e nascidos depois de 1995 são crianças. Liste o nome do cliente e esta classificação.
+
+SELECT [NOME],
+CASE 
+	WHEN YEAR([DATA DE NASCIMENTO]) < 1990 THEN 'ADULTO'
+	WHEN YEAR([DATA DE NASCIMENTO]) BETWEEN 1990 AND 1995 THEN 'JOVENS'
+	ELSE 'CRIANÇA' END AS [CLASSIFICAÇÃO ETÁRIA]
+FROM [TABELA DE CLIENTES]
+
+--------------------------------------------------------------------------------------	
+
+Joins - Possibilidade de unir uma ou mais tabelas através de campos em comum
+Existem vários tipos de JOINs que iremos ver agora:
+
+Para fazer um join precisa de uma chava primaria (primary key) em uma ou mais tabelas que queremos juntar, precisa ter o mesmo tipo
+
+nome	identificador		identificador	hobby         
+joão	  1			 1		 praia
+maria	  3			 3		 futebol
+pedro	  4			 5		 fotografia
+cláudia	  8			 8		 atesanato 
+
+SELECT A.NOME, B.HOBBY FROM
+TABELA_ESQUERDA A
+INNER JOIN
+TABELA_DIREITA B
+ON A.INDENTIFICADOR = B.INDENTIFICADOR 
+
+O inner join vai juntar os campos que existem nas duas tabelas 
+
+SELECT * FROM [TABELA DE VENDEDORES]
+
+SELECT * FROM [NOTAS FISCAIS]
+
+SELECT * FROM [TABELA DE VENDEDORES] INNER JOIN 
+[NOTAS FISCAIS] ON [TABELA DE VENDEDORES].MATRICULA = [NOTAS FISCAIS].MATRICULA
+
+SELECT * FROM [TABELA DE VENDEDORES] A INNER JOIN 
+[NOTAS FISCAIS] B ON A.MATRICULA = B.MATRICULA
+
+SELECT [TABELA DE VENDEDORES].MATRICULA, [TABELA DE VENDEDORES].[NOME], COUNT(*) 
+FROM [TABELA DE VENDEDORES] INNER JOIN 
+[NOTAS FISCAIS] ON [TABELA DE VENDEDORES].MATRICULA = [NOTAS FISCAIS].MATRICULA
+GROUP BY [TABELA DE VENDEDORES].MATRICULA, [TABELA DE VENDEDORES].[NOME]
+
+SELECT [TABELA DE VENDEDORES].MATRICULA, [TABELA DE VENDEDORES].[NOME], YEAR(DATA), 
+COUNT(*) FROM [TABELA DE VENDEDORES] INNER JOIN 
+[NOTAS FISCAIS] ON [TABELA DE VENDEDORES].MATRICULA = [NOTAS FISCAIS].MATRICULA
+GROUP BY [TABELA DE VENDEDORES].MATRICULA, [TABELA DE VENDEDORES].[NOME], YEAR(DATA)
+
+SELECT [TABELA DE VENDEDORES].MATRICULA, [TABELA DE VENDEDORES].[NOME], YEAR(DATA), 
+COUNT(*) FROM [TABELA DE VENDEDORES] INNER JOIN 
+[NOTAS FISCAIS] ON [TABELA DE VENDEDORES].MATRICULA = [NOTAS FISCAIS].MATRICULA
+GROUP BY [TABELA DE VENDEDORES].MATRICULA, [TABELA DE VENDEDORES].[NOME], YEAR(DATA)
+ORDER BY YEAR(DATA), [TABELA DE VENDEDORES].[NOME]
+
+
+
+SELECT * FROM [TABELA DE VENDEDORES] INNER JOIN 
+[NOTAS FISCAIS] ON [TABELA DE VENDEDORES].MATRICULA = [NOTAS FISCAIS].MATRICULA
+
+SELECT * FROM [TABELA DE VENDEDORES], [NOTAS FISCAIS]
+WHERE [TABELA DE VENDEDORES].MATRICULA = [NOTAS FISCAIS].MATRICULA
+
+Obtenha o faturamento anual da empresa. Leve em consideração que o valor financeiro das vendas consiste em multiplicar a quantidade pelo preço.
+
+SELECT YEAR(DATA), SUM (QUANTIDADE * [PREÇO]) AS FATURAMENTO
+FROM [NOTAS FISCAIS] NF 
+INNER JOIN 
+[ITENS NOTAS FISCAIS] INF 
+ON NF.NUMERO = INF.NUMERO
+GROUP BY YEAR(DATA)
+--------------------------------------------------------------------------------------
+
+LEFT JOIN - Retorna todos da tabela da esquerda e somente os correspondentes na da direita 
+
+nome	identificador		identificador	hobby         
+joão	  1			 1		 praia
+maria	  3			 3		 futebol
+pedro	  4			 5		 fotografia
+cláudia	  8			 8		 atesanato 
+
+SELECT A.NOME, B.HOBBY FROM
+TABELA_ESQUERDA A 
+LEFT JOIN 
+TABELA_DIREITA B
+ON A.INDENTIFICADOR = B.INDENTIFICADOR
+
+RIGT JOIN - Retorna todos da tabela da direita e somente os correspondentes na da direita
+
+SELECT A.NOME, B.HOBBY FROM
+TABELA_ESQUERDA A 
+RIGHT JOIN 
+TABELA_DIREITA B
+ON A.INDEITIFICADOR = B.INDETIFICADOR 
+
+
+SELECT * FROM [TABELA DE CLIENTES] INNER JOIN 
+[NOTAS FISCAIS] ON [TABELA DE CLIENTES].CPF = [NOTAS FISCAIS].CPF
+
+SELECT * FROM [TABELA DE CLIENTES]
+
+SELECT [TABELA DE CLIENTES].[NOME], COUNT(*) FROM [TABELA DE CLIENTES] INNER JOIN 
+[NOTAS FISCAIS] ON [TABELA DE CLIENTES].CPF = [NOTAS FISCAIS].CPF
+GROUP BY [TABELA DE CLIENTES].[NOME]
+
+SELECT [TABELA DE CLIENTES].[NOME], COUNT(*) FROM [TABELA DE CLIENTES] LEFT JOIN 
+[NOTAS FISCAIS] ON [TABELA DE CLIENTES].CPF = [NOTAS FISCAIS].CPF
+GROUP BY [TABELA DE CLIENTES].[NOME]
+
+SELECT [TABELA DE CLIENTES].[CPF], [TABELA DE CLIENTES].[NOME], COUNT(*) FROM [TABELA DE CLIENTES] LEFT JOIN 
+[NOTAS FISCAIS] ON [TABELA DE CLIENTES].CPF = [NOTAS FISCAIS].CPF
+GROUP BY  [TABELA DE CLIENTES].[CPF], [TABELA DE CLIENTES].[NOME]
+
+SELECT * FROM [NOTAS FISCAIS] WHERE CPF = '95939180787'
+
+SELECT [TABELA DE CLIENTES].[NOME], [NOTAS FISCAIS].[MATRICULA] FROM [TABELA DE CLIENTES] LEFT JOIN 
+[NOTAS FISCAIS] ON [TABELA DE CLIENTES].CPF = [NOTAS FISCAIS].CPF
+
+SELECT DISTINCT [TABELA DE CLIENTES].[NOME], [NOTAS FISCAIS].[MATRICULA] FROM [TABELA DE CLIENTES] LEFT JOIN 
+[NOTAS FISCAIS] ON [TABELA DE CLIENTES].CPF = [NOTAS FISCAIS].CPF
+
+SELECT DISTINCT [TABELA DE CLIENTES].[NOME], [NOTAS FISCAIS].[MATRICULA] FROM [NOTAS FISCAIS] RIGHT JOIN 
+ [TABELA DE CLIENTES] ON [TABELA DE CLIENTES].CPF = [NOTAS FISCAIS].CPF
+
+
+------------------------------------------------------------------------------------------
+
+FULL JOIN - Retorna todos os registros de todas as tabelas 
+
+nome	identificador		identificador	hobby         
+joão	  1			 1		 praia
+maria	  3			 3		 futebol
+pedro	  4			 5		 fotografia
+cláudia	  8			 8		 atesanato 
+
+SELECT A.NOME, B.HOBBY FROM
+TABELA_ESQUERDA A 
+FULL JOIN
+TABELA_DIREITA B
+ON A.INDETIFICADOR = B.INDEITIFICADOR 
+
+
+CROSS JOIN - Retorna o produto cartesiano das duas tabelas 
+
+nome	identificador		identificador	hobby         
+joão	  1			 1		 praia
+maria	  3			 3		 futebol
+pedro	  4			 5		 fotografia
+cláudia	  8			 8		 atesanato 
+
+Faz uma analise combinatoria dos registros da tabela
+
+SELECT A.NOME, B.HOBBY FROM 
+TABELA_ESQUERDA A, TABELA_DIREITA B 
+
+
+SELECT * FROM [TABELA DE VENDEDORES]
+
+SELECT * FROM [TABELA DE CLIENTES]
+
+
+SELECT [TABELA DE VENDEDORES].BAIRRO, [TABELA DE CLIENTES].BAIRRO FROM
+[TABELA DE VENDEDORES] INNER JOIN [TABELA DE CLIENTES] ON 
+[TABELA DE VENDEDORES].BAIRRO = [TABELA DE CLIENTES].BAIRRO
+
+SELECT [TABELA DE VENDEDORES].BAIRRO, [TABELA DE VENDEDORES].[NOME],  
+[TABELA DE CLIENTES].BAIRRO, [TABELA DE CLIENTES].[NOME] FROM
+[TABELA DE VENDEDORES] LEFT JOIN [TABELA DE CLIENTES] ON 
+[TABELA DE VENDEDORES].BAIRRO = [TABELA DE CLIENTES].BAIRRO
+
+SELECT [TABELA DE VENDEDORES].BAIRRO, [TABELA DE VENDEDORES].[NOME],  
+[TABELA DE CLIENTES].BAIRRO, [TABELA DE CLIENTES].[NOME] FROM
+[TABELA DE VENDEDORES] RIGHT JOIN [TABELA DE CLIENTES] ON 
+[TABELA DE VENDEDORES].BAIRRO = [TABELA DE CLIENTES].BAIRRO
+
+SELECT [TABELA DE VENDEDORES].BAIRRO, [TABELA DE VENDEDORES].[NOME],  
+[TABELA DE CLIENTES].BAIRRO, [TABELA DE CLIENTES].[NOME] FROM
+[TABELA DE VENDEDORES] FULL JOIN [TABELA DE CLIENTES] ON 
+[TABELA DE VENDEDORES].BAIRRO = [TABELA DE CLIENTES].BAIRRO
+
+SELECT [TABELA DE VENDEDORES].BAIRRO, [TABELA DE CLIENTES].BAIRRO FROM
+[TABELA DE VENDEDORES] CROSS JOIN [TABELA DE CLIENTES] 
+
+------------------------------------------------------------------------------------------
+
+UNION - Faz a união de duas ou mais tabelas, junta duas consultas select resultando em uma tabela unica, quando tem dois registros que aparece igual em duas tabelas depois do comando ela vai aparecer so um
+
+identificador	hobby            idetificador 	 hobby
+1		praia		 1		 praia
+3		futebol		 3		 futebol
+5		fotografia	 5		 fotografia
+8		artesanato	 8		 atesanato 
+				 12		 cinema
+				 14		 computador
+				 15		 ver tv
+				 18		 tênis
+
+identificador	hobby
+12		cinema
+14		computador
+15		ver tv
+18		tênis
+
+UNION ALL - Não aplica o DISTINCT sobre o resultado final da consulta, ou seja, os valores que tem na duas tabelas apareceram repetidos 
+
+
+SELECT DISTINCT [TABELA DE CLIENTES].BAIRRO FROM [TABELA DE CLIENTES]
+
+SELECT DISTINCT [TABELA DE VENDEDORES].BAIRRO FROM [TABELA DE VENDEDORES]
+
+SELECT DISTINCT [TABELA DE CLIENTES].BAIRRO FROM [TABELA DE CLIENTES]
+UNION
+SELECT DISTINCT [TABELA DE VENDEDORES].BAIRRO FROM [TABELA DE VENDEDORES]
+
+SELECT DISTINCT [TABELA DE CLIENTES].BAIRRO FROM [TABELA DE CLIENTES]
+UNION ALL
+SELECT DISTINCT [TABELA DE VENDEDORES].BAIRRO FROM [TABELA DE VENDEDORES]
+
+SELECT DISTINCT [TABELA DE CLIENTES].[BAIRRO], [TABELA DE CLIENTES].[DATA DE NASCIMENTO] FROM [TABELA DE CLIENTES]
+UNION ALL
+SELECT DISTINCT [TABELA DE VENDEDORES].BAIRRO, [TABELA DE VENDEDORES].[NOME] FROM [TABELA DE VENDEDORES]
+
+SELECT DISTINCT [TABELA DE CLIENTES].[BAIRRO], [TABELA DE CLIENTES].[NOME] FROM [TABELA DE CLIENTES]
+UNION ALL
+SELECT DISTINCT [TABELA DE VENDEDORES].BAIRRO, [TABELA DE VENDEDORES].[NOME] FROM [TABELA DE VENDEDORES]
+
+SELECT DISTINCT [TABELA DE CLIENTES].[BAIRRO], [TABELA DE CLIENTES].[NOME], 'CLIENTE' FROM [TABELA DE CLIENTES]
+UNION ALL
+SELECT DISTINCT [TABELA DE VENDEDORES].BAIRRO, [TABELA DE VENDEDORES].[NOME], 'VENDEDOR' FROM [TABELA DE VENDEDORES]
+
+------------------------------------------------------------------------------------------
+
+Sub-consulta: Podemos usar uma subconsulta dentro de uma consulta.
+
+
+SELECT NOME, BAIRRO FROM [TABELA DE CLIENTES]
+
+SELECT NOME, BAIRRO FROM [TABELA DE CLIENTES]
+WHERE BAIRRO IN (SELECT BAIRRO FROM [TABELA DE VENDEDORES])
+
+SELECT EMBALAGEM, MAX([PREÇO DE LISTA]) FROM [TABELA DE PRODUTOS] GROUP BY EMBALAGEM
+
+SELECT NOVA_CONSULTA.EMBALAGEM, NOVA_CONSULTA.MAX_PRECO
+FROM (SELECT EMBALAGEM, MAX([PREÇO DE LISTA]) AS MAX_PRECO FROM [TABELA DE PRODUTOS] GROUP BY EMBALAGEM)
+NOVA_CONSULTA
+WHERE NOVA_CONSULTA.MAX_PRECO <= 5
+
+Qual seria a consulta, usando sub-consulta, que seria equivalente a:
+
+SELECT CPF, COUNT(*) FROM [NOTAS FISCAIS]
+WHERE YEAR(DATA) = 2016
+GROUP BY CPF
+HAVING COUNT(*) > 2000
+
+SELECT X.CPF, X.CONTADOR FROM 
+(SELECT CPF, COUNT(*) AS CONTADOR FROM [NOTAS FISCAIS]
+WHERE YEAR(DATA) = 2016
+GROUP BY CPF) X WHERE X.CONTADOR > 2000
+
+------------------------------------------------------------------------------------------
+
+View - A View é uma tabela lógica, resultado de uma consulta, que pode ser usada depois em qualquer outra consulta 
+
+SELECT NOME, BAIRRO FROM [TABELA DE CLIENTES]
+
+SELECT NOME, BAIRRO FROM [TABELA DE CLIENTES]
+WHERE BAIRRO IN (SELECT BAIRRO FROM [TABELA DE VENDEDORES])
+
+SELECT EMBALAGEM, MAX([PREÇO DE LISTA]) FROM [TABELA DE PRODUTOS] GROUP BY EMBALAGEM
+
+SELECT NOVA_CONSULTA.EMBALAGEM, NOVA_CONSULTA.MAX_PRECO
+FROM (SELECT EMBALAGEM, MAX([PREÇO DE LISTA]) AS MAX_PRECO FROM [TABELA DE PRODUTOS] GROUP BY EMBALAGEM)
+NOVA_CONSULTA
+WHERE NOVA_CONSULTA.MAX_PRECO <= 5
+
+SELECT EMBALAGEM, MAX([PREÇO DE LISTA]) AS MAX_PRECO FROM [TABELA DE PRODUTOS] GROUP BY EMBALAGEM
+
+CREATE VIEW VW_EMBALAGENS AS 
+SELECT EMBALAGEM, MAX([PREÇO DE LISTA]) AS MAX_PRECO FROM [TABELA DE PRODUTOS] GROUP BY EMBALAGEM
+
+SELECT * FROM [dbo].[VW_EMBALAGENS]
+
+SELECT NOVA_CONSULTA.EMBALAGEM, NOVA_CONSULTA.MAX_PRECO
+FROM VW_EMBALAGENS NOVA_CONSULTA
+WHERE NOVA_CONSULTA.MAX_PRECO <= 5
+
+Para criar uma view pelo assistente:
+- Dentro do banco de dados temos a pasta exibições
+- Botão direito do mouse sobre exibições 
+- Nova exibição 
+- copia e cola na caixa de dialogo que abrir a consulta sql que vc quiser 
+- clica no botão de salve e cola um nome para sua view 
+
+CREATE VIEW vwProdutos AS
+SELECT IdProduto AS Código,
+       Nome AS Produto,
+       Fabricante,
+       Quantidade,
+       VlUnitario AS [ValorUnitario],
+       Tipo
+FROM Produtos
+
+------------------------------------------------------------------------------------------
+
+Funções de string - cada banco de dados tem o seu proprio 
+
+LTRIM
+Retorna uma expressão de caractere depois de remover espaços em branco à esquerda
+
+Sintaxe 
+
+LTRIM (character_expression)
+
+Argumentos
+character_expression
+É uma expression de dados binários ou de caracteres. character_expression pode ser uma constante, variável ou coluna. character_expression deve ser um tipo de dados, exceto text, ntext e image, que é implicitamente conversível em varchar. Caso contrário, use CAST para converter character_expression explicitamente.
+
+RTRIM
+Retorna uma cadeia de caractres depois de truncar todos os espaços à direita, ou seja, ele remove os espaços em branco do lado direito no final da cadeia de caracteres 
+
+Sintaxe 
+
+RTRIM (character_expression)
+
+Argumentos
+character_expression
+É uma expression de dados de caractere. character_expression pode ser uma constante, uma variável ou uma coluna de dados binários caracteres.
+
+character_expression deve ser um tipo de dados implicitamente conversível em varchar. Caso contrário, use CAST para converter character_expression explicitamente
+
+LEFT
+Retorna a parte da esquerda de uma cadeia de caracteres com o número de caracteres especificado.
+
+Sintaxe
+
+LEFT ( character_expression, integer_expression )
+
+Argumentos
+character_expression
+É uma expression de dados binários ou de caracteres. character_expression pode ser uma constante, variável ou coluna. character_expression
+pode ser de qualquer tipo de dados, exceto text ou ntext que pode ser convertido implicitamente em varchar ou nvarchar. Caso contrário, use a função CAST para converter explicitamente character_expression
+
+interger_expression
+É um inteiro positivo que especifica quantos caracteres da character_expression serão retornados. Se integer_expression for negativa, um erro será retornado. Se interger_expression for do tipo bigint e contiver um valor grande, character_expression deverá ser de um tipo de dados grandes, como varchar(max).
+
+o parâmetro interger_expression conta um caractere alternativo de UTF-16 como um caractere
+
+RIGHT 
+Retorna a parte da direita de uma cadeia de caracteres com o número de caracteres especificado.
+
+Sintaxe
+
+RIGHT ( character_expression, integer_expression )
+
+Argumentos
+character_expression
+É uma expression de dados binários ou de caracteres. character_expression pode ser uma constante, variável ou coluna. character_expression
+pode ser de qualquer tipo de dados, exceto text ou ntext que pode ser convertido implicitamente em varchar ou nvarchar. Caso contrário, use a função CAST para converter explicitamente character_expression
+
+interger_expression
+É um inteiro positivo que especifica quantos caracteres da character_expression serão retornados. Se integer_expression for negativa, um erro será retornado. Se interger_expression for do tipo bigint e contiver um valor grande, character_expression deverá ser de um tipo de dados grandes, como varchar(max).
+
+CONCAT
+Retorna uma cadeia de caracteres que é resultado da concatenação de dois ou mais valores. (Para adicionar um valor de separação durante a concatenação, consulte CONCAT WS)
+
+Sintaxe
+
+CONCAT (string_value1, string_value2 [, string_valueN] )
+
+Argumentos
+string_value
+Um valor de cadeia de caracteres para concatenação com outros valores
+
+SUBSTRING
+Retorna parte de uma expressão de caractere, binária, de texto ou de imagem no SQL Server.
+
+Sintaxe
+
+SUBSTRING ( expression, start, length )
+
+Argumentos
+expression
+É character, binary, text, ntext ou image expression
+
+start
+É um inteiro ou uma expressão bigint que especifica o ponto em que os caracteres retornados devem iniciar. (A numração é baseada em 1, ou seja, o primeiro caracter da expressão é 1). Se start for menos que 1, a expressão retornada começará no primeiro caractere especificado em expression. Neste caso, o número de caracteres retornados é o valor maior da soma de start + lenght -1 ou 0. Se start for maior que o número de caracteres na expressão de valor, uma expressão de comprimento zero será retornada.
+
+length
+É um inteiro positivo ou uma expressão bigint que especifica quantos caracteres da expression são retornados. Se lenght for negativo, um erro será gerado e a instrução será encerrada. Se a soma de start e length for maior que o número de caracteres em expression, a expressão de valor inteiro começando no start será retornado.
+
+LEN
+Retorna o número de caracteres da expressão da cadeia de caracteres especificada, excluindo espaços em branco à direita
+
+Observações
+Para retornar o número de bytes usado para representar uma expressão, use a função DATALENGTH
+
+Sintaxe
+
+LEN ( string_expression )
+
+Argumentos
+string_expression
+É a expression da cadeia de caracteres a ser avaliada. character_expression pode ser uma constante, uma variável ou uma coluna de caracteres e binários.
+
+UPPER
+Retorna uma expressão de caracteres com dados de caractere em minúsculas convertidos em maiúsculas.
+
+Sintaxe
+
+UPPER ( character_expression )
+
+Argumentos 
+character_expression
+É uma expression de dados de caractere. character_expression pode ser uma constante, uma variável ou uma coluna de dados binários caracteres.
+
+character_expression dever ser um tipo de dados implicitamente conversível em varchar. Caso contrário, use CAST para converter character_expression explicitamente.
+
+LOWER
+Retorna uma expressão de caracteres depois de converter para minúsculas os dados de caracteres em maiúsculas
+
+Sintaxe
+
+LOWER ( character_expression )
+
+character_expression
+É uma expression de dados binários ou de caracteres. character_expression pode ser uma constante, variável ou coluna. character_expression deve ser um tipo de dados implicitamente conversível em varchar. Caso contrário, use CAST para convedrter character_expression explicitamente.
+
+SELECT LTRIM('      OLA')
+
+SELECT RTRIM('OLA      ')
+
+SELECT CONCAT('OLA ','TUDO BEM')
+
+SELECT 'OLA ' + 'TUDO BEM'
+
+SELECT LEFT('RUA AUGUSTA',3) 
+
+SELECT RIGHT('RUA AUGUSTA',7) 
+
+SELECT UPPER('rua augusta')   
+
+SELECT LOWER('RUA AUGUSTA')   
+
+SELECT REPLACE('R. AUGUSTA','R.','RUA') 
+
+SELECT SUBSTRING('RUA AUGUSTA', 1, 3) 
+
+SELECT SUBSTRING('RUA AUGUSTA', 2, 4) 
+
+SELECT LEN('RUA AUGUSTA')  
+
+SELECT * FROM [TABELA DE CLIENTES]
+
+SELECT CONCAT(NOME, ' (', CPF, ') ') FROM [TABELA DE CLIENTES]
+
+
+Faça uma consulta que lista o nome do cliente e o endereço completo (com rua, bairro, cidade e estado).
+
+SELECT NOME, CONCAT([ENDERECO 1], ' ', BAIRRO, ' ', CIDADE, ' ', ESTADO) AS COMPLETO
+FROM [TABELA DE CLIENTES]
+
+------------------------------------------------------------------------------------------
+
+Funções de dados de data e hora
+
+Tipos de dados de data e hora 
+
+O Transact-SQL tipos de dados de data e hora são listados na tabela a seguir:
+
+Print junto com arquivo
+
+
+SYSDATETIME 
+
+Sintaxe
+
+SYSDATETIME()
+
+Valor de Retorno
+Retorna um datetime2(7) valor que contém a data e hora do computador no qual a instância do SQL Server está em execução. O deslocamento de fuso horário não está incluído.
+
+SYSDATETIMEOFFSET
+
+Sintaxe
+
+SYSDATETIMEOFFSET()
+
+Valor de Retorno
+Retorna um datetimeoffset(7) valor que contém a data e hora do computador no qual a instância do SQL Server está em execução. O deslocamento de fuso horário está incluíndo.
+
+SYSUTCDATETIME
+
+Sintaxe
+
+SYSUTCDATETIME()
+
+Valor de Retorno
+Retorno um datetime2(7) valor que contém a data e hora do computador no qual a instância do SQL Server está em execução. A data e hora é retornada como hora UTC (Coordinate Universal Time).
+
+
+CURRENT_TIMESTAMP
+
+Sintaxe
+
+CURRENT_TIMESTAMP
+
+Valor de retorno
+Retorna um datetime valor que contém a data e hora do computador no qual a instância do SQL Server está em execução. O deslocamento de fuso horário não está incluído.
+
+GETDATE
+
+Sintaxe
+
+GETDATE ()
+
+Valor de Retorno
+Retorna um datetime valor que contém a data e hora do computador no qual a imnstância do SQL Server está em execução. O deslocamento de fuso horário não está incluído.
+
+GETUTCDATE
+
+Sintaxe
+
+GETTCDATE()
+
+Valor de Retorno
+Retorna um datetima valor que contém a data e hora do computador no qual a instância do SQL Server está em execução. A data e hora é retonada com hora UTC (Coordinate Universal Time).
+
+Funções que obtêm partes de datas e hora
+
+DATENAME
+
+Sintaxe
+DATENAME( datepart, data)
+
+Valor de Retorno
+Retorna uma cadeia de caracteres que representa a datepart da data especificada.
+
+Tipo de dados de retorno
+nvarchar
+
+DATEPART
+
+Sintaxe
+
+DATEPART( datepart, data)
+
+Valor de Retorno
+Retorna um inteiro que presenta a datepart especificada data.
+
+Tipo de dados de retorno
+int
+
+DAY
+
+Sintaxe
+
+DIA(data)
+
+Valor de Retorno
+Retorna um inteiro que resenta a parte do dia espedificada data
+
+Tipo de dados do retorno
+int 
+
+MONTH
+
+Sintaxe
+
+MES(data)
+
+Valor de Retorno
+Retorna um inteiro que resenta a parte do mês de uma espedificada data
+
+Tipo de dados do retorno
+int 
+
+YEAR
+
+Sintaxe
+
+ANO(data)
+
+Valor de Retorno
+Retorna um inteiro que resenta a parte do ano de uma espedificada data
+
+Tipo de dados do retorno
+int 
+
+Funções que obtêm valores de data e hora de suas partes
+
+DATEFROMPARTS
+
+Sintaxe
+DATEFROMPARTS(ano, mês, dia)
+
+Valor de retorno
+Retorna um data valor para o ano especificado, mês e dia.
+
+Tipo de dados de retorno
+date
+
+DATETIME2FROMPARTS
+
+Sintaxe
+DATETIME2FROMPARTS(ano, mês, dia, hora, minuto, segundos, frações, precisão)
+
+Valor de retorno
+Retorna um datetime2 valor para a data e hora especificadas e com a precisão especificada.
+
+Tipo de dados de retorno
+datetime2(precisão)
+
+DATETIMEFROMPARTS
+
+Sintaxe
+DATETIMEFROMPARTS(ano, mês, dia, hora, minuto, segundo, milissegundos)
+
+Valor de retorno
+Retorna um datetime valor para a data e hora especificadas.
+
+Tipo de dados de retorno
+datetime
+
+DATETIMEOFFSETFROMPARTS
+
+Sintaxe
+DATETIMEOFFSETFROMPARTS(ano, mês, dia, hora, minuto, segundos, frações, hour_offset, minute_offset, precisão)
+
+Valor de retorno
+Retorna um datetimeoffset valor para a data e hora especificadas e com os deslocamentos e precisão especificados.
+
+Tipo de dados de retorno
+Data e hora(precisão)
+
+SMALLDATETIMEFROMPARTS
+
+SMALLDATETIMEFROMPARTS(ano, mês, dia, hora, minuto)
+
+Valor de retorno
+Retorna um smalldatetime valor para a data e hora especificada
+
+Tipo de dados de retorno
+smalldatetime
+
+TIMEFROMPARTS
+
+TIMEFROMPARTS(hora, minuto, segundo, frações, precisão)
+
+Valor de retorno
+Retorna um tempo valor para o tempo especificado e com a precisão especificada.
+
+Tipode dados de retorno
+tempo(precisão)
+
+Funções que obtêm diferença de data e hora 
+
+DATEDIFF
+
+DATEDIFF(datepart, startdate, enddate)
+
+Valor de retorno
+Retorna o número de data ou hora datepart limites que são cruzados entre duas data especificadas.
+
+Tipo de dados de retorno
+int 
+
+Determinismo - Determinística
+
+DATEDIFF_BIG
+
+DATEDIFF_BIG(datepart, startdate, enddate)
+
+Valor de retorno
+Retorna o número de data ou hora datepart limmites que são cruzados entre duas data especificadas
+
+Tipo de dados de retorno
+bigint 
+
+Determinismo - Determinística
+
+Funções que modificam os valores de data e hora 
+
+DATEADD
+
+DATEADD(datepart, número, data)
+
+VAlor de retorno
+Retorna um novo datetime valor adicionando um intervalo especificado datepart especificada data
+
+Tipo de dados de retorno
+O tipo de dados de data argumento
+
+EOMONTH
+
+EOMONTH(start_date[month_to_add])
+
+Valor de retorno
+Retorna o último dia do mês que contém a data especificada com um deslocamento opcional
+
+Tipo de dados de retorno
+Tipo de retorno é o tipo de start_date ou data
+
+SWITCHFFSET
+
+SWITCHFFSET(DATEMEOFFSET, fuso_horario)
+
+Valor de retorno
+Opçãodeslocamento altera o deslocamento de fuso horário do valor DATETIMEOFFSET e preserva o valor UTC
+
+Tipode dados de retorno
+DateTimeOffset com a precisão fracionária de DATETIMEOFFSET
+
+TODATETIMEOFFSET
+
+TODATETIMEOFFSET(expressão, fuso_horário)
+
+Valor de retorno
+TODATETIMEOFFSET tranforma um valor datetime2 em um valolr datetimeoffset. O valor datetime2 é interpretado em hora local para time_zone especificado.
+
+Tipo de dados de retorno
+DateTimeOffset com a precisão fracionada de datetime argumento
+
+Funções que validam valores de data e hora 
+
+ISDATE
+
+ISDATE(expressão)
+
+Valor de retorno
+Determina se um datetime ou smalldatetime expressão de entrada é uma data válida ou um valor de tempo
+
+Tipo de dados de retorno
+int
+
+Determinismo
+ISDATE só será deterministica se você usá-la com a função CONVERT, quando o parâmetro de estilo CONVERT for especificado e o estilo não for igual a 0, 100, 9 nem 109
+
+Data e tópicos relacionados a tempo
+
+Tópico
+CAST e CONVERT (Transact-SQL)
+
+Description
+Fornece informações sobre a conversão de valores de data e hora para e de literais de cadeias de caracteres, bem como outros formatos de data e hora 
+
+
+
+SELECT SYSDATETIME()
+
+SELECT SYSDATETIMEOFFSET()
+
+SELECT SYSUTCDATETIME()
+
+SELECT CURRENT_TIMESTAMP
+
+SELECT GETDATE()
+
+SELECT GETUTCDATE()
+
+SELECT DATENAME(YEAR,GETDATE())
+
+SELECT DATENAME(MICROSECOND,GETDATE())
+
+SELECT DATENAME(MINUTE,GETDATE())
+
+
+SELECT DATENAME(MONTH,GETDATE())
+
+SELECT DATEPART(MONTH,GETDATE())
+
+SELECT DAY(GETDATE())
+
+SELECT YEAR(GETDATE())
+
+SELECT DATEFROMPARTS(2015,9,1)
+
+SELECT DATENAME(MONTH,DATEFROMPARTS(2015,9,1))
+
+SELECT DATETIME2FROMPARTS(2015,9,1,13,12,11,120,4)
+
+SELECT DATEDIFF(MONTH, DATEFROMPARTS(2015,9,1), GETDATE())
+
+SELECT DATEADD(MONTH, 5, GETDATE())
+
+SELECT ISDATE('2018-01-01')
+
+SELECT ISDATE('2018-25-28')
+
+SELECT * FROM [NOTAS FISCAIS]
+
+SELECT [DATA], CONCAT(DATENAME(DAY, [DATA]), ' ', DATENAME(MONTH, [DATA]), ' ', DATENAME(YEAR, [DATA]))
+FROM [NOTAS FISCAIS]
+
+Crie uma consulta que mostre o nome e a idade dos clientes.
+
+SELECT NOME, DATEDIFF(YEAR, [DATA DE NASCIMENTO], GETDATE()) AS IDADE
+FROM [TABELA DE CLIENTES]
+
+------------------------------------------------------------------------------------------
+
+Funções Matematicas
+
+CEILING
+Retorna o menor inteiro maior que ou igual a expressão numérica especificada, retorna o maior inteiro de um número
+
+Sintaxe
+CEILING( numeric_expression )
+
+Argumentos
+numeric_expression 
+É uma expression da categoria de tipo de dados numéricos exatos ou aproximados, com exceção do tipo de dados bit 
+
+FLOOR
+Retorna o maior inteiro menor ou igual á expressão númerica especificada, retorna o menor inteiro daquele número
+
+Sintaxe
+FLOOR ( numeric_expression )
+
+Argumentos
+numeric_expression 
+É uma expression da categoria de tipo de dados numéricos exatos ou aproximados, com exceção do tipo de dados bit 
+
+Tipos de retorno
+Retorna o mesmo tipo que numeric_expression
+
+RAND
+Retorna um valor float pseudoaleatório de 0 a 1, exclusivo.
+
+Sintaxe
+RAND( [ seed ] )
+
+Argumentos
+seed
+É um número inteiro expressão(tinyint, smallint, ou int) qu fornece o valor de sementes. Se seed não estiver especificado, o Mecanimos do banco de Dados do SQL Server atribuirá um valor de semente aleatório. Para um valor de semente especificado, o resultado retornado é sempre o mesmo.
+
+ROUND
+Retorna um valor numérico, arredondado, para o comprimento ou precisão especificados.
+
+Sintaxe
+ROUND( numeric_expression, length, [function])
+
+Argumentos
+numeric_expression
+É uma expression da categoria de tipo de dados númericos exatos ou aproximados, com exceção do tipo de dados bit
+
+length
+É a precisão para a qual numeric_expression deve ser arredondada. length deve ser uma expressão do tipo tinyint, smallint ou int. Quan é um número positivo, numeric_expression é arredondado para o número deposições decimais especificadas por length. Quando legth for um número negativo, numeric_expression é arredondado á esquerda da virgula decimal, conforme especificado por length.
+
+
+SELECT CEILING(12.333223)
+
+SELECT FLOOR(12.333223)
+
+SELECT RAND()
+
+SELECT ROUND(12.33323323, 2)
+
+SELECT * FROM [ITENS NOTAS FISCAIS]
+
+SELECT [QUANTIDADE], [PREÇO], ROUND(([QUANTIDADE] * [PREÇO]),1) FROM [ITENS NOTAS FISCAIS]
+
+
+Na tabela de notas fiscais, temos o valor do imposto. Já na tabela de itens, temos a quantidade e o faturamento. Calcule o valor do imposto pago no ano de 2016, arredondando para o menor inteiro.
+
+SELECT YEAR(DATA), FLOOR(SUM(IMPOSTO * (QUANTIDADE * PREÇO))) 
+FROM [NOTAS FISCAIS] NF
+INNER JOIN [ITENS NOTAS FISCAIS] INF ON NF.NUMERO = INF.NUMERO
+WHERE YEAR(DATA) = 2016
+GROUP BY YEAR(DATA)
+
+------------------------------------------------------------------------------------------
+
+Conversão de dados
+
+CAST or CONVERT
+Converte uma expressão de um tipo de dados para outro.
+
+Qual a diferença entre CAST e Convert?
+
+Ambos fazem a mesma coisa
+
+Porém: CAST é padrão SQL. Pode ser usado em outros bancos de dados 
+
+Convert é específico para SQL Server
+
+Porém, pelo fato do Convert ser específico, ele possui funcionalidades mais complexas.
+
+Vamos usar o Convert
+
+DATA e HORA (Conversões)
+
+Convert(<tipo>, <campo data>, <Estilo>)
+
+Ex: CONVERT(VARCHAR, GETDATE(), 101) = 04/09/2018
+
+
+
+SELECT CONVERT(VARCHAR, GETDATE(), 101)
+
+SELECT CONVERT(VARCHAR, GETDATE(), 113)
+
+SELECT CONVERT(VARCHAR, GETDATE(), 130)
+
+SELECT CONVERT(decimal(10,5), 193.57)
+
+SELECT * FROM [TABELA DE PRODUTOS]
+
+SELECT 'O preço do produto ' + [NOME DO PRODUTO] + ' é ' +  [PREÇO DE LISTA] 
+from [TABELA DE PRODUTOS]
+
+SELECT 'O preço do produto ' + [NOME DO PRODUTO] + ' é ' +  CONVERT(VARCHAR, [PREÇO DE LISTA]) 
+from [TABELA DE PRODUTOS]
+
+Queremos construir um SQL cujo resultado seja, para cada cliente: **"O cliente João da Silva faturou 120000 no ano de 2016".
+
+Somente para o ano de 2016.
+
+SELECT CONCAT('O cliente ', TC.NOME, ' faturou ', 
+CONVERT(VARCHAR, CONVERT(DECIMAL(15,2), SUM(INF.QUANTIDADE * INF.[PREÇO]))), ' no ano ',   CONVERT(VARCHAR, YEAR(NF.DATA))) AS SENTENCA FROM [NOTAS FISCAIS] NF
+INNER JOIN [ITENS NOTAS FISCAIS] INF ON NF.NUMERO = INF.NUMERO
+INNER JOIN [TABELA DE CLIENTES] TC ON NF.CPF = TC.CPF
+WHERE YEAR(DATA) = 2016
+GROUP BY TC.NOME, YEAR(DATA)
+
+------------------------------------------------------------------------------------------
+
+Exemplo de Relatorios 
+
+- Veja o que o relatorio está pedindo
+- Separe as tabelas que estão a informações 
+- Selecione as informações 
+- Construa um select 
+
+SELECT * FROM [TABELA DE CLIENTES]
+
+SELECT * FROM [ITENS NOTAS FISCAIS]
+
+SELECT * FROM [NOTAS FISCAIS]
+
+SELECT * FROM [NOTAS FISCAIS] NF
+INNER JOIN [ITENS NOTAS FISCAIS] INF
+ON NF.NUMERO = INF.NUMERO 
+
+SELECT NF.CPF, SUBSTRING(CONVERT(VARCHAR, NF.[DATA], 120),1,7) AS ANO_MES
+, INF.QUANTIDADE  FROM [NOTAS FISCAIS] NF
+INNER JOIN [ITENS NOTAS FISCAIS] INF
+ON NF.NUMERO = INF.NUMERO 
+
+SELECT NF.CPF, SUBSTRING(CONVERT(VARCHAR, NF.[DATA], 120),1,7) AS ANO_MES
+, SUM(INF.QUANTIDADE) AS QUANTIDADE_MES  FROM [NOTAS FISCAIS] NF
+INNER JOIN [ITENS NOTAS FISCAIS] INF
+ON NF.NUMERO = INF.NUMERO 
+GROUP BY NF.CPF, SUBSTRING(CONVERT(VARCHAR, NF.[DATA], 120),1,7)
+
+SELECT TC.NOME, TC.[VOLUME DE COMPRA] FROM [TABELA DE CLIENTES] TC
+
+SELECT * FROM [TABELA DE CLIENTES] TC
+
+SELECT TC.NOME, CQ.ANO_MES, CQ.QUANTIDADE_MES, TC.[VOLUME DE COMPRA]
+FROM
+(SELECT NF.CPF, SUBSTRING(CONVERT(VARCHAR, NF.[DATA], 120),1,7) AS ANO_MES
+, SUM(INF.QUANTIDADE) AS QUANTIDADE_MES  FROM [NOTAS FISCAIS] NF
+INNER JOIN [ITENS NOTAS FISCAIS] INF
+ON NF.NUMERO = INF.NUMERO 
+GROUP BY NF.CPF, SUBSTRING(CONVERT(VARCHAR, NF.[DATA], 120),1,7)) CQ
+INNER JOIN [TABELA DE CLIENTES] TC ON TC.CPF = CQ.CPF
+
+SELECT AUX1.NOME, AUX1.ANO_MES, AUX1.QUANTIDADE_MES, 
+CASE WHEN AUX1.QUANTIDADE_MES <= AUX1.[VOLUME DE COMPRA] THEN 'VENDA VÁLIDA'
+WHEN AUX1.QUANTIDADE_MES > AUX1.[VOLUME DE COMPRA] THEN 'VENDA INVÁLIDA'
+END AS STATUS_VENDA
+FROM 
+(SELECT TC.NOME, CQ.ANO_MES, CQ.QUANTIDADE_MES, TC.[VOLUME DE COMPRA]
+FROM
+(SELECT NF.CPF, SUBSTRING(CONVERT(VARCHAR, NF.[DATA], 120),1,7) AS ANO_MES
+, SUM(INF.QUANTIDADE) AS QUANTIDADE_MES  FROM [NOTAS FISCAIS] NF
+INNER JOIN [ITENS NOTAS FISCAIS] INF
+ON NF.NUMERO = INF.NUMERO 
+GROUP BY NF.CPF, SUBSTRING(CONVERT(VARCHAR, NF.[DATA], 120),1,7)) CQ
+INNER JOIN [TABELA DE CLIENTES] TC ON TC.CPF = CQ.CPF) AUX1
+ORDER BY AUX1.NOME, AUX1.ANO_MES
+
+Nesta aula, construímos um relatório que apresentou os clientes que tiveram vendas inválidas. Complemente este relatório, listando somente os que tiveram vendas inválidas e calculando a diferença entre o limite de venda máximo e o realizado, em percentuais.
+
+Dica:
+
+Capture o SQL final da aula.
+
+Filtre somente as linhas onde:
+
+AUX1.QUANTIDADE_MES > AUX1.[VOLUME DE COMPRA] 
+Liste a coluna de AUX1.[VOLUME DE COMPRA].
+
+Crie uma nova coluna, fazendo a fórmula:
+
+( (AUX1.QUANTIDADE_MES/AUX1.[VOLUME DE COMPRA]) - 1) * 100
+Utilize seus conhecimentos para converter o valor percentual para duas casas decimais.
+
+Este desafio pode obter diversas respostas. Abaixo tem uma delas:
+
+SELECT AUX1.NOME, AUX1.ANO_MES, AUX1.[VOLUME DE COMPRA], AUX1.QUANTIDADE_MES, 
+CONVERT(DECIMAL(15,2), ( (AUX1.QUANTIDADE_MES/AUX1.[VOLUME DE COMPRA]) - 1) * 100)  AS VARIACAO, 
+CASE WHEN AUX1.QUANTIDADE_MES <= AUX1.[VOLUME DE COMPRA] THEN 'VENDA VÁLIDA'
+WHEN AUX1.QUANTIDADE_MES > AUX1.[VOLUME DE COMPRA] THEN 'VENDA INVÁLIDA'
+END AS STATUS_VENDA
+FROM 
+(SELECT TC.NOME, CQ.ANO_MES, CQ.QUANTIDADE_MES, TC.[VOLUME DE COMPRA]
+FROM
+(SELECT NF.CPF, SUBSTRING(CONVERT(VARCHAR, NF.[DATA], 120),1,7) AS ANO_MES, 
+SUM(INF.QUANTIDADE) AS QUANTIDADE_MES  FROM [NOTAS FISCAIS] NF
+INNER JOIN [ITENS NOTAS FISCAIS] INF
+ON NF.NUMERO = INF.NUMERO 
+GROUP BY NF.CPF, SUBSTRING(CONVERT(VARCHAR, NF.[DATA], 120),1,7)) CQ
+INNER JOIN [TABELA DE CLIENTES] TC ON TC.CPF = CQ.CPF) AUX1
+WHERE  AUX1.QUANTIDADE_MES > AUX1.[VOLUME DE COMPRA] 
+ORDER BY AUX1.NOME, AUX1.ANO_MES
+
+
+-- VERIFICAR SE AS VENDAS FORAM INVÁLIDAS
+
+SELECT X.NOME, X.MES_ANO, X.QUANTIDADE,
+CASE WHEN Y.[VOLUME DE COMPRA]  < X.QUANTIDADE THEN 'VENDA INVÁLIDA'
+WHEN Y.[VOLUME DE COMPRA] >= X.QUANTIDADE  THEN 'VENDA VÁLIDA'
+ELSE 'PRODUTO BARATO' END
+ FROM (
+SELECT A.CPF, A.NOME, SUBSTRING(CONVERT(VARCHAR,  B.DATA, 120),1,7) AS MES_ANO , 
+SUM(C.QUANTIDADE) AS QUANTIDADE FROM 
+[TABELA DE CLIENTES] A
+INNER JOIN [NOTAS FISCAIS] B
+ON A.CPF = B.CPF
+INNER JOIN [ITENS NOTAS FISCAIS] C
+ON B.NUMERO = C.NUMERO
+GROUP BY A.CPF, A.NOME, SUBSTRING(CONVERT(VARCHAR,  B.DATA, 120),1,7)
+) X INNER JOIN [TABELA DE CLIENTES] Y ON X.CPF = Y.CPF
+ORDER BY X.NOME, X.MES_ANO
+
+------------------------------------------------------------------------------------------
+
+
+SELECT * FROM [TABELA DE PRODUTOS] TP
+
+SELECT * FROM [NOTAS FISCAIS] NF
+
+SELECT * FROM [ITENS NOTAS FISCAIS] INF
+
+SELECT TP.SABOR, NF.DATA, (INF.QUANTIDADE * INF.PREÇO) AS FATURAMENTO
+FROM [ITENS NOTAS FISCAIS] INF INNER JOIN [TABELA DE PRODUTOS] TP
+ON TP.[CODIGO DO PRODUTO] = INF.[CODIGO DO PRODUTO]
+INNER JOIN [NOTAS FISCAIS] NF 
+ON NF.NUMERO = INF.NUMERO
+
+SELECT TP.SABOR, YEAR(NF.DATA) AS ANO, SUM (INF.QUANTIDADE * INF.PREÇO) AS FATURAMENTO
+FROM [ITENS NOTAS FISCAIS] INF INNER JOIN [TABELA DE PRODUTOS] TP
+ON TP.[CODIGO DO PRODUTO] = INF.[CODIGO DO PRODUTO]
+INNER JOIN [NOTAS FISCAIS] NF 
+ON NF.NUMERO = INF.NUMERO
+GROUP BY TP.SABOR, YEAR(NF.DATA)
+
+SELECT TP.SABOR, YEAR(NF.DATA) AS ANO, SUM (INF.QUANTIDADE * INF.PREÇO) AS FATURAMENTO
+FROM [ITENS NOTAS FISCAIS] INF INNER JOIN [TABELA DE PRODUTOS] TP
+ON TP.[CODIGO DO PRODUTO] = INF.[CODIGO DO PRODUTO]
+INNER JOIN [NOTAS FISCAIS] NF 
+ON NF.NUMERO = INF.NUMERO
+WHERE YEAR(NF.DATA) = 2016
+GROUP BY TP.SABOR, YEAR(NF.DATA)
+
+SELECT YEAR(NF.DATA) AS ANO, SUM (INF.QUANTIDADE * INF.PREÇO) AS FATURAMENTO
+FROM [ITENS NOTAS FISCAIS] INF INNER JOIN [TABELA DE PRODUTOS] TP
+ON TP.[CODIGO DO PRODUTO] = INF.[CODIGO DO PRODUTO]
+INNER JOIN [NOTAS FISCAIS] NF 
+ON NF.NUMERO = INF.NUMERO
+WHERE YEAR(NF.DATA) = 2016
+GROUP BY YEAR(NF.DATA)
+
+SELECT AUX1.SABOR, AUX1.ANO, AUX1.FATURAMENTO, AUX2.TOTAL FROM
+(SELECT TP.SABOR, YEAR(NF.DATA) AS ANO, SUM (INF.QUANTIDADE * INF.PREÇO) AS FATURAMENTO
+FROM [ITENS NOTAS FISCAIS] INF INNER JOIN [TABELA DE PRODUTOS] TP
+ON TP.[CODIGO DO PRODUTO] = INF.[CODIGO DO PRODUTO]
+INNER JOIN [NOTAS FISCAIS] NF 
+ON NF.NUMERO = INF.NUMERO
+WHERE YEAR(NF.DATA) = 2016
+GROUP BY TP.SABOR, YEAR(NF.DATA)) AUX1
+INNER JOIN (SELECT YEAR(NF.DATA) AS ANO, SUM (INF.QUANTIDADE * INF.PREÇO) AS TOTAL
+FROM [ITENS NOTAS FISCAIS] INF INNER JOIN [TABELA DE PRODUTOS] TP
+ON TP.[CODIGO DO PRODUTO] = INF.[CODIGO DO PRODUTO]
+INNER JOIN [NOTAS FISCAIS] NF 
+ON NF.NUMERO = INF.NUMERO
+WHERE YEAR(NF.DATA) = 2016
+GROUP BY YEAR(NF.DATA)) AUX2
+ON AUX1.ANO = AUX2.ANO
+
+
+SELECT AUX1.SABOR, AUX1.ANO, CONVERT(DECIMAL(15,2), AUX1.FATURAMENTO) AS FATURAMENTO
+, CONVERT(VARCHAR, CONVERT(DECIMAL(15,2),(AUX1.FATURAMENTO/AUX2.TOTAL) * 100)) + ' %' 
+AS PERCENTUAL FROM
+(SELECT TP.SABOR, YEAR(NF.DATA) AS ANO, SUM (INF.QUANTIDADE * INF.PREÇO) AS FATURAMENTO
+FROM [ITENS NOTAS FISCAIS] INF INNER JOIN [TABELA DE PRODUTOS] TP
+ON TP.[CODIGO DO PRODUTO] = INF.[CODIGO DO PRODUTO]
+INNER JOIN [NOTAS FISCAIS] NF 
+ON NF.NUMERO = INF.NUMERO
+WHERE YEAR(NF.DATA) = 2016
+GROUP BY TP.SABOR, YEAR(NF.DATA)) AUX1
+INNER JOIN (SELECT YEAR(NF.DATA) AS ANO, SUM (INF.QUANTIDADE * INF.PREÇO) AS TOTAL
+FROM [ITENS NOTAS FISCAIS] INF INNER JOIN [TABELA DE PRODUTOS] TP
+ON TP.[CODIGO DO PRODUTO] = INF.[CODIGO DO PRODUTO]
+INNER JOIN [NOTAS FISCAIS] NF 
+ON NF.NUMERO = INF.NUMERO
+WHERE YEAR(NF.DATA) = 2016
+GROUP BY YEAR(NF.DATA)) AUX2
+ON AUX1.ANO = AUX2.ANO
+ORDER BY AUX1.FATURAMENTO DESC
+
+
+
+
+SELECT X.SABOR, X.ANO, CONVERT(DECIMAL(10,2), X.FATURAMENTO) AS FATURAMENTO, CONVERT(VARCHAR, (X.FATURAMENTO/ Y.FATURAMENTO_TOTAL) * 100 )+ '%' AS PARTICIPACAO
+FROM 
+(SELECT A.SABOR, YEAR(C.DATA) AS ANO, SUM(B.PREÇO * B.QUANTIDADE) AS FATURAMENTO FROM 
+[TABELA DE PRODUTOS] A 
+INNER JOIN [ITENS NOTAS FISCAIS] B ON A.[CODIGO DO PRODUTO] = B.[CODIGO DO PRODUTO]
+INNER JOIN [NOTAS FISCAIS] C ON B.NUMERO = C.NUMERO
+WHERE YEAR(C.DATA) = 2016
+GROUP BY A.SABOR, YEAR(C.DATA) 
+) X
+INNER JOIN
+(SELECT YEAR(C.DATA) AS ANO, SUM(B.PREÇO * B.QUANTIDADE) AS FATURAMENTO_TOTAL FROM 
+[TABELA DE PRODUTOS] A 
+INNER JOIN [ITENS NOTAS FISCAIS] B ON A.[CODIGO DO PRODUTO] = B.[CODIGO DO PRODUTO]
+INNER JOIN [NOTAS FISCAIS] C ON B.NUMERO = C.NUMERO
+WHERE YEAR(C.DATA) = 2016
+GROUP BY YEAR(C.DATA) 
+) Y
+ON X.ANO = Y.ANO
+ORDER BY X.FATURAMENTO DESC
+
+
+Modifique o relatório, mas agora para ver o ranking das vendas por tamanho.
+
+Basta substituir o campo SABOR por TAMANHO:
+
+
+
